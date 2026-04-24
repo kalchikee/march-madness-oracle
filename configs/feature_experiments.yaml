@@ -1,0 +1,32 @@
+# Feature-group ablations the weekly retrain loop iterates over.
+# Each experiment name maps to a list of feature groups to INCLUDE.
+# The retrain job picks one randomly per Sunday and tracks its performance.
+
+experiments:
+  baseline:
+    groups: [team_season, matchup, context]
+
+  plus_kenpom:
+    groups: [team_season, matchup, context, kenpom]
+
+  plus_momentum:
+    groups: [team_season, matchup, context, momentum]
+
+  plus_travel_and_coach:
+    groups: [team_season, matchup, context, travel, coach]
+
+  plus_late_season_sos:
+    groups: [team_season, matchup, context, momentum, travel]
+    late_season_sos_weight: 2.0
+
+  full:
+    groups: [team_season, four_factors, kenpom, torvik, momentum, matchup, context, coach, travel, roster]
+
+  # Novel-signal focused ablations
+  no_kenpom_test:
+    groups: [team_season, four_factors, torvik, momentum, matchup, context, coach, travel]
+    description: "Test how much KenPom actually moves accuracy vs free alternatives"
+
+  style_clash_only:
+    groups: [team_season, matchup, context, four_factors]
+    description: "Isolate the style-clash signal"

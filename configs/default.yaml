@@ -1,0 +1,33 @@
+backtest:
+  min_train_seasons: 10
+  holdout_last: 3
+  metric: log_loss
+
+ingest:
+  start_season: 1985
+  rate_limit_seconds: 3.0
+
+features:
+  groups:
+    - team_season
+    - four_factors
+    - kenpom
+    - torvik
+    - momentum
+    - matchup
+    - context
+    - coach
+    - travel
+    - roster
+
+training:
+  default_model: stacking_ensemble
+  base_models: [logistic_l2, xgboost, lightgbm, catboost]
+  tune_trials_per_model: 100
+
+predict:
+  n_monte_carlo_sims: 10000
+  confidence_tiers:
+    lock: 0.80
+    likely: 0.62
+    lean: 0.55

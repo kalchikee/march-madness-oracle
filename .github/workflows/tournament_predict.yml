@@ -1,0 +1,59 @@
+name: Tournament Predict
+
+on:
+  schedule:
+    - cron: "0 */4 15-31 3 *"   # every 4h, Mar 15-31
+    - cron: "0 */4 1-10 4 *"    # every 4h, Apr 1-10
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Tournament season year"
+        required: false
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - run: pip install -e ".[dev]"
+
+      - name: Download snapshot
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python - <<'PY'
+          from madness.storage import download_latest
+          import os
+          download_latest(os.environ["GITHUB_REPOSITORY"])
+          PY
+
+      - name: Fetch bracket
+        run: |
+          python scripts/fetch_bracket.py || echo "bracket not yet available; skipping"
+
+      - name: Predict and post to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [[ -f bracket.json ]]; then
+            madness predict bracket --season ${{ github.event.inputs.season || '' }} --post-discord
+          else
+            echo "No bracket.json; nothing to do."
+          fi
+
+      - name: Commit prediction artifacts
+        run: |
+          git config user.name "madness-bot"
+          git config user.email "madness-bot@users.noreply.github.com"
+          git add data/processed state || true
+          git diff --cached --quiet || git commit -m "chore: tournament prediction cycle"
+          git push || true

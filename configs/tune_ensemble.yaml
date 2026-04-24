@@ -1,0 +1,11 @@
+model: stacking_ensemble
+n_folds: 5
+base_models:
+  - logistic_l2
+  - xgboost
+  - lightgbm
+  - catboost
+meta_learner:
+  kind: logistic_regression
+  C: 1.0
+  max_iter: 2000

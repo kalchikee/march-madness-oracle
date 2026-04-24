@@ -1,0 +1,47 @@
+{
+  "name": "logistic_l2",
+  "trained_at": "2026-04-18T17:05:56.004160",
+  "feature_names": [
+    "seed_diff",
+    "seed_sum",
+    "seed_a_log",
+    "seed_b_log",
+    "seed_diff_sq",
+    "round",
+    "is_r64",
+    "is_s16_plus",
+    "seed_diff_x_round",
+    "hist_fav_win_rate",
+    "hist_n",
+    "favorite_is_a",
+    "diff_school_career_tourney_wins",
+    "diff_school_career_f4s",
+    "diff_school_career_e8s",
+    "diff_school_last5_tourney_wins",
+    "diff_prior_adj_oe",
+    "diff_prior_adj_de",
+    "diff_prior_barthag",
+    "diff_prior_adj_tempo",
+    "diff_prior_wab",
+    "diff_prior_rank",
+    "diff_coach_career_tourney_wins",
+    "diff_coach_career_f4s",
+    "diff_coach_career_e8s"
+  ],
+  "params": {
+    "C": 0.5,
+    "max_iter": 2000
+  },
+  "metrics": {
+    "holdout_accuracy": 0.7964601769911505,
+    "model_family": "Logistic C=0.5",
+    "n_features": 25,
+    "holdout_seasons": [
+      2022,
+      2023,
+      2024
+    ]
+  },
+  "feature_hash": "",
+  "version": "0.1.0"
+}
