@@ -57,3 +57,4 @@ jobs:
           git add data/processed state || true
           git diff --cached --quiet || git commit -m "chore: tournament prediction cycle"
           git push || true
+
