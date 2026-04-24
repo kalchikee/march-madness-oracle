@@ -170,6 +170,14 @@ def predict_bracket(
     save_predictions(preds, out_path)
     typer.echo(f"Wrote {len(preds)} predictions to {out_path}")
 
+    # Emit predictions JSON for kalshi-safety to consume.
+    try:
+        from madness.predictions_file import write_predictions_file
+        json_path = write_predictions_file(date=None, predictions=preds)
+        typer.echo(f"Wrote kalshi predictions JSON to {json_path}")
+    except Exception as e:
+        typer.echo(f"[kalshi] Failed to write predictions file: {e}")
+
     if post_discord:
         secrets = Secrets.from_env()
         if not secrets.has_discord:
